@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Stiffness Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        h1 {
+            color: #333333;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555555;
+        }
+        input {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 200px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 8px;
+            cursor: pointer;
+            background-color: #4285f4;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #3367d6;
+        }
+        h2 {
+            color: #333333;
+            margin-top: 20px;
+        }
+        #result {
+            color: #4285f4;
+            font-weight: bold;
+        }
+        .img1 {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        .img{
+            max-width: 100%;
+            height: auto;
+            position: absolute;
+            top: -30px;
+            right: -70px;
+            scale: 50%;
+        }
+        .image-center {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            position: relative;
+            top: 55px;
+            margin: 55px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Spring Stiffness Calculator</h1>
+
+    <label for="wireDiameter">Wire Diameter (d):</label>
+    <input type="text" id="wireDiameter" placeholder="Enter wire diameter (m)" required>
+
+    <label for="meanCoilDiameter">Mean Coil Diameter (D):</label>
+    <input type="text" id="meanCoilDiameter" placeholder="Enter mean coil diameter (m)" required>
+
+    <label for="numberOfLoops">Number of Loops:</label>
+    <input type="text" id="numberOfLoops" placeholder="Enter number of loops" required>
+
+    <button onclick="calculateStiffness()">Calculate Stiffness</button>
+
+    <h2>Result:</h2>
+    <p id="result"></p>
+    <div class="shear-modulus" id="shearModulusDisplay"></div>
+
+    <img class="img" src="assets/img/paper1.jpg" alt="Sample Image 1">
+    <img class="image-center" src="assets/img/paper2.jpg" alt="Sample Image Center">
+    <img class="image-center" src="assets/img/paper3.jpg" alt="Sample Image Center">
+
+    <script>
+        function calculateStiffness() {
+            // Get input values and remove commas
+            var wireDiameter = parseFloat(document.getElementById('wireDiameter').value.replace(/,/g, ''));
+            var meanCoilDiameter = parseFloat(document.getElementById('meanCoilDiameter').value.replace(/,/g, ''));
+            var numberOfLoops = parseFloat(document.getElementById('numberOfLoops').value.replace(/,/g, ''));
+
+            // Check if values are provided
+            if ( isNaN(wireDiameter) || isNaN(meanCoilDiameter) || isNaN(numberOfLoops)) {
+                alert('Please enter valid numeric values for all parameters.');
+                return;
+            }
+
+            var shearModulus = ((-5e-5 * Math.pow(wireDiameter, 6) + 0.0038 * Math.pow(wireDiameter, 5) - 0.0998 * Math.pow(wireDiameter, 4) + 1.0077 * Math.pow(wireDiameter, 3) - 1.7886 * Math.pow(wireDiameter, 2) - 31.349 * wireDiameter + 728.25))*1000000;
+
+            // Calculate spring constant
+            var springConstant = (shearModulus * Math.pow(wireDiameter, 4) / (8 * Math.pow(meanCoilDiameter, 3) * numberOfLoops));
+
+            // Display the result
+            document.getElementById('result').innerText = 'Spring Constant (k): ' + springConstant.toFixed(4) + ' N/m';
+
+            document.getElementById('shearModulusDisplay').innerText = 'Approximate Shear Modulus (G): ' + shearModulus.toFixed(4) + ' MPa';
+        }
+    </script>
+</body>
+</html>
